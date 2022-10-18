@@ -95,10 +95,13 @@ class PickMethod {
         return AssetPicker.pickAssets(
           context,
           pickerConfig: AssetPickerConfig(
+            gridCount: 3,
+            pageSize: 30,
             maxAssets: maxAssetsCount,
             selectedAssets: assets,
             specialItemPosition: SpecialItemPosition.prepend,
             requestType: RequestType.image,
+            specialPickerType: SpecialPickerType.noPreview,
             specialItemBuilder: (
               BuildContext context,
               AssetPathEntity? path,
