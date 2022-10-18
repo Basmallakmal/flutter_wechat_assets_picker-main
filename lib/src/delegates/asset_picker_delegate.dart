@@ -59,8 +59,7 @@ class AssetPickerDelegate {
   ///  * [DefaultAssetPickerBuilderDelegate] which is the default builder that
   ///    builds all widgets during the picking process.
   /// {@endtemplate}
-  Future<List<AssetEntity>?> pickAssets(
-    BuildContext context, {
+  Future<List<AssetEntity>?> pickAssets(BuildContext context, {
     Key? key,
     AssetPickerConfig pickerConfig = const AssetPickerConfig(),
     bool useRootNavigator = true,
@@ -98,20 +97,44 @@ class AssetPickerDelegate {
         selectPredicate: pickerConfig.selectPredicate,
         shouldRevertGrid: pickerConfig.shouldRevertGrid,
         limitedPermissionOverlayPredicate:
-            pickerConfig.limitedPermissionOverlayPredicate,
+        pickerConfig.limitedPermissionOverlayPredicate,
         pathNameBuilder: pickerConfig.pathNameBuilder,
         textDelegate: pickerConfig.textDelegate,
         themeColor: pickerConfig.themeColor,
         locale: Localizations.maybeLocaleOf(context),
       ),
     );
-    final List<AssetEntity>? result = await Navigator.of(
-      context,
-      rootNavigator: useRootNavigator,
-    ).push<List<AssetEntity>>(
-      pageRouteBuilder?.call(picker) ??
-          AssetPickerPageRoute<List<AssetEntity>>(builder: (_) => picker),
+    final List<AssetEntity>? result = await showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      isScrollControlled: true,
+      enableDrag: false,
+      context: context,
+      builder: (ct) =>
+          FractionallySizedBox(
+            heightFactor: 0.9,
+            child: BottomSheet(
+              backgroundColor: Colors.white,
+              clipBehavior: Clip.antiAlias,
+              enableDrag: false,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              onClosing: () {},
+              builder: (ctx) {
+                return picker;
+              },
+            ),
+          ),
     );
+    // final List<AssetEntity>? result = await Navigator.of(
+    //   context,
+    //   rootNavigator: useRootNavigator,
+    // ).push<List<AssetEntity>>(
+    //   pageRouteBuilder?.call(picker) ??
+    //       AssetPickerPageRoute<List<AssetEntity>>(builder: (_) => picker),
+    // );
     return result;
   }
 
@@ -133,13 +156,13 @@ class AssetPickerDelegate {
   ///    during the picking process.
   /// {@endtemplate}
   Future<List<Asset>?> pickAssetsWithDelegate<Asset, Path,
-      PickerProvider extends AssetPickerProvider<Asset, Path>>(
-    BuildContext context, {
-    required AssetPickerBuilderDelegate<Asset, Path> delegate,
-    Key? key,
-    bool useRootNavigator = true,
-    AssetPickerPageRouteBuilder<List<Asset>>? pageRouteBuilder,
-  }) async {
+  PickerProvider extends AssetPickerProvider<Asset, Path>>(BuildContext context,
+      {
+        required AssetPickerBuilderDelegate<Asset, Path> delegate,
+        Key? key,
+        bool useRootNavigator = true,
+        AssetPickerPageRouteBuilder<List<Asset>>? pageRouteBuilder,
+      }) async {
     await permissionCheck();
     final Widget picker = AssetPicker<Asset, Path>(
       key: key,

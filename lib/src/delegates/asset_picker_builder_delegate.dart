@@ -541,7 +541,7 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
         tooltip: MaterialLocalizations
             .of(context)
             .backButtonTooltip,
-        icon: const Icon(Icons.close),
+        icon: const Icon(Icons.close,color: Colors.black,),
       ),
     );
   }
@@ -890,8 +890,12 @@ class DefaultAssetPickerBuilderDelegate
         onTapHint: semanticsTextDelegate.sActionSwitchPathLabel,
         child: pathEntitySelector(context),
       ),
+      actions: [
+        backButton(context),
+      ],
       automaticallyImplyLeading: false,
       automaticallyImplyActions: false,
+      actionsPadding: EdgeInsets.only(right: 8),
       blurRadius: isAppleOS ? appleOSBlurRadius : 0,
     );
   }
