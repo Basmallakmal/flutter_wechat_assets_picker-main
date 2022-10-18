@@ -13,8 +13,13 @@ Future<AssetEntity?> _pickFromCamera(BuildContext c) {
 }
 
 Future<AssetEntity?> _pickFromCameraImage(BuildContext c) {
+  const EnglishCameraPickerTextDelegate textDelegate =
+      EnglishCameraPickerTextDelegate();
   return CameraPicker.pickFromCamera(
     c,
+    pickerConfig: const CameraPickerConfig(
+      textDelegate: textDelegate,
+    ),
   );
 }
 
@@ -91,7 +96,8 @@ class PickMethod {
       name: 'Pick from camera',
       description: 'Allow pick an asset through camera.',
       method: (BuildContext context, List<AssetEntity> assets) {
-        const EnglishAssetPickerTextDelegate textDelegate = EnglishAssetPickerTextDelegate();
+        const EnglishAssetPickerTextDelegate textDelegate =
+            EnglishAssetPickerTextDelegate();
         return AssetPicker.pickAssets(
           context,
           pickerConfig: AssetPickerConfig(
@@ -117,7 +123,8 @@ class PickMethod {
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () async {
-                    final AssetEntity? result = await _pickFromCameraImage(context);
+                    final AssetEntity? result =
+                        await _pickFromCameraImage(context);
                     if (result != null) {
                       handleResult(context, result);
                     }
